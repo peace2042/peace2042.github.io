@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Taxation in the United States</title>
+        
+        <style>
+            body {
+                background-color: rgb(192, 237, 250);
+            }
+            #passed {
+                color: red;
+            }
+            #gt {
+                background-color: yellow;
+            }
+            
+        </style>
+    </head>
+    <body>
+    
+    <p id="passed">It has been 0 seconds</p>
+    
+    <h2>Taxes collected since opening this page</h2>
+<ul class="animal-kill-counter">
+  <li><span id="tc-federal">0</span> US Federal Government tax revenue</li>
+  <li><span id="tc-state">0</span> Total state tax revenue</li>
+  <li><span id="tc-local">0</span> Total local tax revenue</li>
+    <li id="gt"><span id="tc-gt">0</span> Grand total</li>
+</ul>
+
+<h3>Sources</h3>
+<ul>
+  <li><a href="https://www.usgovernmentrevenue.com/current_revenue">US Government Revenue [What is the Total US Government Revenue?]</a></li>
+</ul>
+
+
+    </body>
+    
+    <script>
+    
+window.addEventListener('DOMContentLoaded',function(){
+  var updatesPerSecond = 20;
+  var taxesPerYear = {
+    "federal": (3.7 * 1000000000000),
+    "state": (2.1 * 1000000000000),
+    "local": 1.5* 1000000000000,
+    "gt": 7.34 * 1000000000000,
+  };
+
+  var secondsPerYear = 365 * 24 * 60 * 60;
+  var interval = 1000/ updatesPerSecond;
+  var count = 0, start = new Date().getTime();
+
+  function update(intervalCount) {
+    for (var subset in taxesPerYear) {
+      var num = taxesPerYear[subset];
+      var countElement = document.getElementById("tc-" + subset);
+      if (countElement) {
+        countElement.innerHTML = Math.round(intervalCount * (num/secondsPerYear) / updatesPerSecond).toLocaleString();
+      }
+    }
+  }
+
+  function selfCorrectingTimeoutInterval() {
+    update(++count);
+    window.setTimeout(selfCorrectingTimeoutInterval, interval - (new Date().getTime() - start - count * interval));
+  }
+  window.setTimeout(selfCorrectingTimeoutInterval, interval);
+});
+
+////
+// Timer
+////
+var sec =0, min=0, hour=0;
+setInterval(function(){
+	sec++;
+	if(sec==60){sec=0; min++;}
+	if(min==60){min=0; hour++;}
+	var str = 'It has been';
+	str+= hour?' ' +hour + (hour==1?' hour':' hours') + ' and':'';
+	str+= min?' ' +min+ (min==1?' minute':' minutes') + ' and':'';
+	str+= sec?' ' +sec+ (sec==1?' second':' seconds'):'';
+document.getElementById('passed').innerHTML=str;
+},1000);
+////
+// Timer Ends
+////
+</script>
+</html>
